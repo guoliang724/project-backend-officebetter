@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const multer = require("multer");
-
+const User = require("../model/user");
+const authen = require("../middleware/authen");
 //constant variables
-const baseURl = "http://localhost:5001";
+const baseURl = "http://localhost:5001/upload/";
 const fileFolder = path.resolve(__dirname, "../public", "upload");
 
 //module template
@@ -17,24 +18,52 @@ var storage = multer.diskStorage({
     cb(null, file.fieldname + "-" + Date.now() + ext);
   },
 });
-var upload = multer({ storage: storage });
+//limits 4 mb
+var upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 4 * 1024,
+  },
+});
 var uploadSingle = upload.single("avatar");
 
 //add on handle error function
-router.post("/", (req, res) => {
-  uploadSingle(req, res, (err) => {
+
+router.post("/", authen, (req, res) => {
+  console.log("user after authen", req.user);
+  uploadSingle(req, res, async (err) => {
     if (err) {
+      console.log("err here", err);
       return res.send({
         statis: 0,
         msg: "Upload File Failed!",
       });
     }
-    var file = req.file;
+
+    //get the filename
+    var filename = req.file.filename;
+    //get the url information
+    var url = baseURl + filename;
+    //get the user id of the user
+
+    var useId = req.user.id;
+
+    //update the image url in database
+    const result = await User.update(
+      { imgUrl: url },
+      {
+        where: {
+          id: useId,
+        },
+      }
+    );
+    console.log("result", result);
+
     res.send({
       status: 1,
       data: {
-        filename: file.filename,
-        url: baseURl + file.filename,
+        filename,
+        url,
       },
     });
   });

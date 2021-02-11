@@ -15,17 +15,17 @@ router.post("/", async (req, res) => {
     },
   });
 
-  console.log(result);
   //user exsit
   if (result.length !== 0) {
     var user = {};
+    user.id = result[0].id;
     user.username = result[0].loginId;
     user.role = result[0].role;
-    user.img = result[0].img;
+    user.imgUrl = result[0].imgUrl;
 
     //transfer to jwt and send it to client
     user = jwt.sign(user, config.get("jwt-secret"), {
-      expiresIn: 7 * 24 * 60 * 60,
+      expiresIn: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.send({

@@ -2,8 +2,9 @@ const jwt = require("jsonwebtoken");
 const token = "user_id";
 const config = require("config");
 
-export default (err, req, res, next) => {
-  var cookie = req.cookies;
+module.exports = function (req, res, next) {
+  var cookie = req.cookies[token];
+  console.log("cookie", cookie);
   //does not exist in browser
   if (!cookie) {
     cookie = req.headers[token];
@@ -15,6 +16,7 @@ export default (err, req, res, next) => {
   try {
     //verify the token
     var user = jwt.verify(cookie, config.get("jwt-secret"));
+    console.log("jwt", user);
   } catch {
     return res.status(403).send("forbidden.....");
   }

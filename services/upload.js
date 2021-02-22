@@ -30,10 +30,8 @@ var uploadSingle = upload.single("avatar");
 //add on handle error function
 
 router.post("/", authen, (req, res) => {
-  console.log("user after authen", req.user);
   uploadSingle(req, res, async (err) => {
     if (err) {
-      console.log("err here", err);
       return res.send({
         statis: 0,
         msg: "Upload File Failed!",
@@ -57,7 +55,6 @@ router.post("/", authen, (req, res) => {
         },
       }
     );
-    console.log("result", result);
 
     res.send({
       status: 1,

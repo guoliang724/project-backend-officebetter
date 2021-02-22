@@ -3,7 +3,7 @@ const path = require("path");
 const app = express();
 const statcPath = path.resolve(__dirname, "public");
 const cookieParser = require("cookie-parser");
-const login = require("./services/login");
+const user = require("./services/user");
 const upload = require("./services/upload");
 
 //initialize settings
@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //login
-app.use("/login", login);
+app.use("/user", user);
 
 //upolad file
 app.use("/upload", upload);

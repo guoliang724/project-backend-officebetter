@@ -5,16 +5,17 @@ const statcPath = path.resolve(__dirname, "public");
 const cookieParser = require("cookie-parser");
 const user = require("./services/user");
 const upload = require("./services/upload");
-
+const role = require("./services/role");
 //initialize settings
 app.use(express.static(statcPath));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//login
+//user
 app.use("/user", user);
-
+//role
+app.use("/role", role);
 //upolad file
 app.use("/upload", upload);
 //listening on port 5000

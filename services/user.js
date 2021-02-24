@@ -42,7 +42,7 @@ router.post("/login", async (req, res) => {
 //add user
 router.post("/add", async (req, res) => {
   const { loginId, loginPwd, email, role } = req.body;
-  const result = await User.create({ loginId, loginPwd, email, phone, role });
+  const result = await User.create({ loginId, loginPwd, email, role });
   console.log(result.toJSON());
   res.send({
     status: 1,
@@ -75,13 +75,14 @@ router.post("/update", async (req, res) => {
 router.post("/delete", async (req, res) => {
   const { id } = req.body;
   console.log("id", id);
-  const result = await User.findOne({
+  const result = await User.destroy({
     where: {
       id,
     },
   });
-  if (result !== null) {
-    await result.destroy();
+
+  console.log("result", result);
+  if (result === 1) {
     res.send({
       status: 1,
       data: "delete success!",

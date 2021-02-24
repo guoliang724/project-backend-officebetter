@@ -1,5 +1,5 @@
 require("./user");
-
+require("./role");
 const sequelize = require("./db");
 
 sequelize

@@ -24,7 +24,7 @@ router.post("/login", async (req, res) => {
     user.imgUrl = result[0].imgUrl;
 
     //transfer to jwt and send it to client
-    user = jwt.sign(user, config.get("jwt-secret"), {
+    user = jwt.sign(user, "guoliang", {
       expiresIn: 7 * 24 * 60 * 60 * 1000,
     });
 
